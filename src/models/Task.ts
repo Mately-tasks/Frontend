@@ -4,5 +4,6 @@ export interface ITask {
   _id: string;
   title: string;
   status: TaskStatus;
+  user: string;
   createdAt: string;
 }

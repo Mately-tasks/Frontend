@@ -1,21 +1,19 @@
-import { apiClient } from './client';
+import axios from 'axios';
+import { Platform } from 'react-native';
 import { ITask } from '../models/Task';
 
-export const taskService = {
+const BASE_URL = 'http://192.168.1.219:3000';
+/**
+ * Fetch tasks created strictly after the provided date.
+ */
+export const fetchTasksAPI = async (afterDate: string): Promise<ITask[]> => {
+  const response = await axios.get(`${BASE_URL}/tasks?after=${afterDate}`);
+  return response.data;
+};
 
-  /**
-   * Récupère les tâches après une date donnée
-   */
-  getTasks: async (afterDate: string): Promise<ITask[]> => {
-    const url =`/tasks?after=${encodeURIComponent(afterDate)}` ;
-    const response = await apiClient.get<ITask[]>(url);
-    return response.data;
-  },
-
-  /**
-   * Lance la simulation de 10 tâches côté backend
-   */
-  simulateTasks: async (): Promise<void> => {
-    await apiClient.post('/simulate');
-  }
+/**
+ * Trigger the backend simulation to generate 10 tasks.
+ */
+export const simulateTasksAPI = async (): Promise<void> => {
+  await axios.post(`${BASE_URL}/simulate`);
 };
